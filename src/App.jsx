@@ -1,14 +1,12 @@
-import { useState } from "react";
-
-import "./App.css";
+import Hero from "./components/Hero";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <div
+      className={`bg-[#131314] overflow-hidden h-screen w-screen selection:bg-cyan-500 selection:text-cyan-900`}
+    >
+      <Hero />
+    </div>
   );
 }
 
