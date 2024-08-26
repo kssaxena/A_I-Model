@@ -11,6 +11,7 @@ import { FaPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Nova from "../assets/Gemini_Generated_Image_t14tj3t14tj3t14t-removebg-preview.png";
 
 const Hero = () => {
   const placeholders = [
@@ -21,10 +22,14 @@ const Hero = () => {
     // "How to assemble your own PC?",
   ];
 
+  const handleReload = () => {
+    window.location.reload();
+  };
+
   const links = [
     {
       label: "New Chat",
-      href: "#",
+      href: {handleReload},
       icon: (
         <FaPlus className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -59,11 +64,15 @@ const Hero = () => {
         href="#"
         className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
       >
-        <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+        <img
+          // className="h-10 w-10"
+          width={100}
+          src={Nova}
+        />
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="font-medium text-black dark:text-cyan-500  whitespace-pre"
+          className="font-medium text-black dark:text-cyan-500  whitespace-pre text-xl"
         >
           NOVA
         </motion.span>
@@ -77,7 +86,12 @@ const Hero = () => {
         href="#"
         className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
       >
-        <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+        {/* <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" /> */}
+        <img
+          // className="h-10 w-10"
+          width={100}
+          src={Nova}
+        />
       </Link>
     );
   };

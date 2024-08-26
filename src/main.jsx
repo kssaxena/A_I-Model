@@ -5,12 +5,16 @@ import "./index.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import appStore from "./utils/Store.js";
 // import { BrowserRouter as Router } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <Provider store={appStore}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
   </React.StrictMode>
 );

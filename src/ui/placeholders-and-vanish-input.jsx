@@ -3,10 +3,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "../utils/cn";
+import { useDispatch } from "react-redux";
+import { addBotReply, addSearchMessage } from "../utils/SearchSlice";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+// const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 export function PlaceholdersAndVanishInput({
   placeholders,
-  onChange,
+  // onChange,
   onSubmit,
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
@@ -165,10 +169,41 @@ export function PlaceholdersAndVanishInput({
     }
   };
 
+  const [searchMessage, setSearchMessage] = useState("");
+  const [botMessage, setBotMessage] = useState("");
+  const dispatch = useDispatch();
+
+  const handelInput = (e) => {
+    setSearchMessage(e.target.value);
+  };
+
+  // Access your API key as an environment variable (see "Set up your API key" above)
+  const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+
+  async function run() {
+    // For text-only input, use the gemini-pro model
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+    // const prompt = "Write a story about a magic backpack.";
+
+    const result = await model.generateContent(searchMessage);
+    const response = await result.response;
+    const text = response.text();
+    setBotMessage(text);
+    console.log(text);
+  }
+
+  const handelSendMessage = async () => {
+    dispatch(addSearchMessage(searchMessage));
+    await run();
+    dispatch(addBotReply(botMessage));
+    setSearchMessage("");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     vanishAndSubmit();
-    onSubmit && onSubmit(e);
+    onSubmit && handelSendMessage(e);
   };
   return (
     <form
@@ -186,15 +221,17 @@ export function PlaceholdersAndVanishInput({
         ref={canvasRef}
       />
       <input
-        onChange={(e) => {
-          if (!animating) {
-            setValue(e.target.value);
-            onChange && onChange(e);
-          }
-        }}
+        onKeyPress={(e) => e.key === "Enter" && handelSendMessage}
+        onChange={handelInput}
+        // onChange={(e) => {
+        //   if (!animating) {
+        //     setValue(e.target.value);
+        //     onChange && onChange(e);
+        //   }
+        // }}
         onKeyDown={handleKeyDown}
         ref={inputRef}
-        value={value}
+        value={searchMessage}
         type="text"
         className={cn(
           "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20",
@@ -202,6 +239,7 @@ export function PlaceholdersAndVanishInput({
         )}
       />
       <button
+        onClick={handelSendMessage}
         disabled={!value}
         type="submit"
         className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"

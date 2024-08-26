@@ -122,7 +122,7 @@ export const SidebarLink = ({ link, className, ...props }) => {
   const { open, animate } = useSidebar();
   return (
     <Link
-      href={link.href}
+      onClick={link.href}
       className={cn(
         "flex items-center justify-start gap-2  group/sidebar py-2 px-2 hover:bg-[#131314] rounded-full hover:border-[#131314] ease-in-out duration-300",
         className
