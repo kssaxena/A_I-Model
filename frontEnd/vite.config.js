@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
     define: {
-      "process.env.MAIN_CONTACT_FORM_SERVICE_KEY": JSON.stringify(env.API_KEY),
+      "process.env.OPENAI_API_KEY": JSON.stringify(env.OPENAI_API_KEY),
     },
     plugins: [react()],
   };
